@@ -1,0 +1,309 @@
+\documentclass[lang=cn,10pt]{template}
+
+\title{微积分入门}
+\subtitle{Int256 带你一起学习微积分}
+
+\author{Int256}
+% \institute{组织}
+\date{\today}
+\version{1.3.2}
+% \bioinfo{自定义}{信息}
+
+\extrainfo{给时光以崇敬与眼泪！——Int256}
+
+\setcounter{tocdepth}{3}
+
+% \logo{logo-blue.png}
+\cover{math.jpg}
+
+% 本文档命令
+\usepackage{array}
+
+% \newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+% \setCJKfamilyfont{NLXJT}{NLXJT}
+% \newcommand{\hmz}{\CJKfamily{NLXJT}}
+% \definecolor{customcolor}{RGB}{32,178,170}
+% \colorlet{coverlinecolor}{customcolor}
+
+\begin{document}
+
+\maketitle
+\frontmatter
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{序}
+
+写这本书其实纯属是突发奇想。因为很多同学认为微积分很难，所以就萌生了这个想法，写了这本书。震惊我的是，同班某同学竟然表示期待与感兴趣。
+
+如果你发现任何问题，我的联系方式（邮箱）如下，欢迎反馈。也可以加入 QQ 群提问。
+
+\begin{itemize}
+  \item 邮箱：\email{alanlym@yeah.net}
+  \item 洛谷：\href{https://www.luogu.com.cn/user/344700}{int256}
+  \item QQ 群：\href{https://jq.qq.com/?_wv=1027&k=lpfM484S}{962035496}
+  \item Github 仓库：\href{https://github.com/tripleInt/LCWI}{tripleInt/LCWI}
+\end{itemize}
+
+本书的章后习题将在最后一章统一讲解。
+由于前面的几章内容比较简单，所以习题会从《高等数学》等的经典书籍中摘录一些。
+
+\section{简介}
+
+本书可能有许多不严谨的地方，基本都是按照自己的理解写的。正规定义会予以特殊标注。不过一般考试不会考你怎么定义的，而且一般用集合论来定义的描述是完全一样的。
+
+\subsection{符号约定}
+\begin{itemize}
+  \item $\forall x$ 代表对于任意的 $x$。
+  
+  符号 $\forall x: p(x)$（如 $\forall x>0$），代表对于任意的符合 $p(x)$ 的 $x$（如对于任意大于 $0$ 的 $x$）。
+  \item $\exists x$ 代表存在 $x$。
+  
+  符号 $\exists x: p(x)$（如 $\exists x > 0$），代表存在符合 $p(x)$ 的 $x$（如大于零的 $x$）。
+  \item 符号
+  \begin{equation*}
+    \max\{a_1, a_2, \dots, a_n\}
+  \end{equation*}
+  表示 $a_1, a_2, \dots, a_n$ 中最大的一个。
+  \item 符号
+  \begin{equation*}
+    \min\{a_1, a_2, \dots, a_n\}
+  \end{equation*}
+  表示 $a_1, a_2, \dots, a_n$ 中最小的一个。
+  \item 符号 $[x]$ 表示 $x$ 的整数部分，即不超过 $x$ 的最大整数。
+  \item 符号 $\square$ 表示证明完毕，或显然（证明过程极其简单），读者可以自行尝试证明。
+  \item $\sum$ 为连加符号、$\prod$ 为连乘符号。用法及定义十分简单，读者可以自行查询。
+  \item 符号 $\subset$ 表示包含（不限于真包含）。即如果集合 $A$ 的任何元素都是集合 $B$ 的元素，则称 $A \subset B$。
+
+  \item 用空心字母 $\mathbb{N, Z, Q, R, C}$ 来表示全体自然数（含 $0$）、整数、有理数、实数、复数的集合。
+
+  \item 通俗地说，$a^+$ 或 $a+$ 表示比 $a$ 大一个极小的数，这个数无限接近于 $0$，取值可以看作 $a$ 但是大于 $a$。类似的，$a^-$ 或 $a-$ 表示比 $a$ 小一个极小地数，这个数无限接近于 $0$，取值可以看作 $a$ 但是小于 $a$。具体的定义后面会讲到。
+
+  \item 其余符号将在第一次出现时给予说明。
+\end{itemize}
+
+\chapter{预备知识}
+\begin{introduction}
+  \item 差集运算
+  \item 关于“空集”
+  \item 存在与任意
+  \item 映射
+  \item 函数
+  \item 逆映射
+  \item 自然定义域
+  \item 复合函数
+  \item 函数的有界性
+  \item 函数的奇偶性
+  \item 函数的单调性
+  \item 函数的周期性
+\end{introduction}
+本章讲解一些数学分析相关的基础知识。
+
+\section{集合与逻辑符号}
+
+\subsection{集合}
+对于两个集合的 $\setminus$ 运算，表示求它们的差集，例如 $A \setminus B$ 表示属于集合 $A$ 但不属于集合 $B$ 的元素。其余的高中必修一的课本有讲解过。这里只讲解一个常见误区：$\varnothing$ 是一个集合，而不是一个“一般性”的元素。
+
+\subsection{逻辑符号}
+设 $\alpha$ 和 $\beta$ 是两个判断。如果当 $\alpha$ 成立时 $\beta$ 也成立，我们就说 $\alpha$ 能够推出 $\beta$，或者 $\alpha$ \emph{蕴含} $\beta$。记为 $\alpha \Rightarrow \beta$。例如 $x \in \mathbb{R} \Rightarrow x \geq 0$。
+
+如果 $\beta\Rightarrow\alpha$ 且 $\alpha\Rightarrow\beta$，我们就说 $\alpha$ 和 $\beta$ \emph{等价}，或者说 $\alpha$ 和 $\beta$ 互为\emph{充要条件}。记为 $\alpha \Leftrightarrow \beta$。例如对于 $x \in \mathbb{R}$， $x > 0 \Leftrightarrow \dfrac 1x > 0$。
+
+设 $\alpha(x)$ 是涉及 $x \in E$ 的一个判断，我们用记号
+
+\begin{equation*}
+  (\exists x \in E)(\alpha(x))
+\end{equation*}
+
+表示“存在 $x \in E$ 使得 $\alpha(x)$ 成立”。例如：
+
+\begin{equation*}
+  (\exists n \in \mathbb{N})(n^2 -4n + 4 > 0).
+\end{equation*}
+
+设 $\beta(x)$ 是涉及 $x \in E$ 的一个判断，我们用记号
+
+\begin{equation*}
+  (\forall x \in E)(\beta(x))
+\end{equation*}
+
+或者 $\beta(x), \forall x \in E$ 表示“对于一切 $x \in E$，$\beta(x)$ 成立”。例如：
+
+\begin{equation*}
+  (\forall n \in \mathbb{R})(n^2 \geq 0)
+\end{equation*}
+
+或者 $n^2 \geq 0, \forall n \in \mathbb{R}$。
+
+\section{函数与映射}
+
+\subsection{基础定义}
+
+其实这个没啥好讲的。不过考虑到数学分析和高等数学的教材中都有提到，所以再讲一遍具体的定义。
+
+我们知道\emph{函数}的定义中提到了“\emph{一一对应}”。即自变量 $x$ 所取的任意一个确定的值，决定了因变量 $y$ 的唯一确定的值与之对应。采用集合论的术语对这说法进一步地概括并描述，就得到了映射的概念。
+
+设 $A$ 和 $B$ 都是集合，我们把 $A$ 的元素与 $B$ 的元素之间的对应关系 $f$ 叫做一个\emph{映射}。如果按照这种对应关系，对集合 $A$ 中的任何一个元素 $a$，有集合 $B$ 中的唯一一个元素 $b$ 与之对应。$f$ 是从 $A$ 到 $B$ 的一个映射，一般记为 $f:A\rightarrow B$。
+按照对应关系 $f$，由 $A$ 中的元素 $a$ 所决定的 $B$ 中的唯一元素 $b$ 记为 $f(a)$。有时候，我们用记号 $a \mapsto b$ 表示元素之间的对应。例如，设 $A=\mathbb R, B = \mathbb R$，而映射 $f: A \rightarrow B$ 定义为 $f(x) = x^2$, 则这映射规定了元素之间这样的对应关系：$f: x \mapsto x^2$。
+
+
+设 $f:A\rightarrow B$ 是一个映射，$C \subset A$, $D \subset B$, 我们把集合 $f(C)=\{f(x) \mid x \in C\}(\subset B)$ 叫做集合 $C$ 经过映射 $f$ 的\emph{像集}，并把集合 $f^{-1}(D)=\{x \mid f(x) \in D\}(\subset A)$ 叫做集合 $D$ 关于映射 $f$ 的\emph{原像集}。
+
+如果 $A \subset \mathbb R, B = \mathbb R$, 那么从 $A$ 到 $B$ 的映射就是通常的一元函数。但映射的概念实际上更广，以后将会遇到更广泛的映射的例子。不过现在我们主要关心的是函数。
+
+也就是说，一个函数的所有的自变量取值组成了它的定义域，即原像，而它的值组成了它的像集。如果对于 $f: A \rightarrow B$，对于任意的两个 $x, y \in A$， $f(x) \neq f(y)$，则称 $f$ 为 $A$ 到 $B$ 的\emph{单射}。
+
+一个函数的逆映射就是从 $B$ 的每个值返回到 $A$ 的一个法则。即如果对于 $f: A \rightarrow B$，$f^{-1}: B \rightarrow A$，对每个 $y \in B$, $f^{-1}(y) = x$，$f(x) = y$。则这个映射 $f^{-1}$ 称为 $f$ 的\emph{逆映射}。
+
+使得一个函数的值有意义的所有可行自变量的取值组成的集合是这个函数的\emph{自然定义域}。
+
+设有两个映射 $g: A \rightarrow B_1, f: B_2 \rightarrow C$, 其中 $B_1 \subset B_2$, 则由映射 $g$ 和 $f$ 可以定出一个从 $A$ 到 $C$ 的对应法则，它将每个 $a \in A$ 映成 $f[g(a)] \in C$。这个对应法则确定了一个从 $A$ 到 $C$ 的映射，这个映射就称为映射 $g$ 和 $f$ 构成的\emph{复合映射}，记为 $f\circ g$，即
+
+\begin{equation*}
+  f \circ g: A \rightarrow C, (f \circ g)(x) = f[g(x)], x \in A
+\end{equation*}
+
+显然由复合映射的定义可以得出，$g$ 的值域必须包含在 $f$ 的定义域内。
+
+\subsection{函数的有界性}
+
+设函数 $f(x)$ 的定义域为 $D$, 数集 $X \subset D$。如果存在 $N_1$ 使得 $f(x) \leq N_1$ 对于任一 $x \in X$ 都成立，那么称函数 $f(x)$ 在 $X$ 上有\emph{上界}，而 $N_1$ 称为函数 $f(x)$ 在 $X$ 上的一个上界。
+
+如果存在数 $N_2$ 使得 $f(x) \geq N_2$ 对于任一 $x \in X$ 都成立，那么称函数 $f(x)$ 在 $X$ 上有\emph{下界}，而 $N_2$ 称为函数 $f(x)$ 在 $X$ 上的一个下界。
+
+函数的\emph{最小上界}定义为最小的一个 $N_1$，\emph{最大下界}定义为最大的一个 $N_2$。
+
+如果存在整数 $K$ 使得 $|f(x)| \leq K, \forall x \in X$，那么称函数 $f(x)$ 在 $X$ 上有\emph{上界}。如果这样的 $K$ 不存在，就称函数 $f(x)$ 在 $X$ 上\emph{无界}。
+
+\subsection{函数的奇偶性}
+
+如果 $f(x)$ 满足 $f(x) = -f(-x), \forall x$，则称函数 $f(x)$ 为\emph{奇函数}。
+
+如果 $f(x)$ 满足 $f(x) = f(-x), \forall x$, 则称函数 $f(x)$ 为\emph{偶函数}。
+
+显然，奇偶函数的定义域都是“对称”的。
+
+如果上面两个条件都不满足，那么称函数 $f(x)$ 是\emph{非奇非偶}函数。
+
+\subsection{函数的单调性}
+
+设 $f: D \rightarrow T$, 区间 $I \subset D$。如果对于区间 $I$ 上的任意两点 $x_1, x_2$，当 $x_1 < x_2$ 时，恒有 $f(x_1) < f(x_2)$，那么称函数 $f$ 在区间 $I$ 上是\emph{单调增加}的。
+如果对于区间 $I$ 上的任意两点 $x_1, x_2$，当 $x_1 < x_2$ 时，恒有 $f(x_1) > f(x_2)$，那么称函数 $f$ 在区间 $I$ 上是\emph{单调减少}的。
+
+单调增加和单调减少的函数统称为\emph{单调函数}。
+
+\emph{增函数}（\emph{单调递增}）指在函数的定义域上函数是单调增加的。\emph{减函数}（\emph{单调递减}）指在函数的定义域上函数是单调减少的。
+
+\subsection{函数的周期性}
+
+设函数 $f(x)$ 的定义域为 $D$。如果存在一个正数 $l$，使得对于任一 $x \in D$ 都有 $(x \pm l) \in D$, 且 $f(x+l)=f(x)$ 恒成立，那么称 $f(x)$ 为\emph{周期函数}，$l$ 称为 $f(x)$ 的\emph{周期}，通常我们说周期函数的周期是指函数的\emph{最小正周期}。
+
+\newpage
+
+\begin{problemset}
+  \item 函数 $f(x) = \lg x^2$ 和函数 $g(x) = 2 \lg x$ 是否相同？为什么？
+  \item 求出并证明函数 $f(x) = \frac{x}{1-x}$ 在 $(-\infty, 1)$ 上的单调性。
+  \item 求出并证明函数 $f(x) = x + \ln x$ 在 $(0, +\infty)$ 上的单调性。
+  \item 设 $f(x)$ 为定义在 $(-l, l)$ 上的奇函数，若 $f(x)$ 在 $(0,l)$ 内单调增加，证明其在 $(-l, 0)$ 内也单调增加。
+  \item 函数 $f_1(x) = x^2(1-x^2)$、$f_2(x) = 3x^2 - x^3$、$f_3(x) = x(x-1)(x+1)$、$f_4(x) = (a^x + a^{-x})/2$、$f_5(x) = \sin x - \cos x + 1$ 中哪些是偶函数，哪些是奇函数，哪些既非奇函数也非偶函数？
+  \item 函数 $f_1(x) = x \cos x$、$f_2(x) = \sin^2 x$、$f_3(x) = \cos(x-2)$、$f_4(x) = \cos (4x)$、$f_5(x) = 1 + \sin \pi x$ 中哪些是周期函数，对于周期函数，其最小正周期是多少？
+  \item 函数 $f(x)$ 的定义域为 $[0,1]$，则函数 $f_1(x)=f(x^2)$、$f_2(x)=f(\sin x)$、$f_3(x)=f(x+a) + f(x-a)\ (a>0)$ 的定义域都是什么？
+  \item 求函数 $f_1(x) = 1 + \ln(x+2)$、$f_2(x) = \sqrt[3]{x+1}$、$f_3(x) = \frac{2}{1+x}-1$、$f_4(x) = 1-\frac{1}{2^x + 1}$ 的反函数。
+  \item 设函数 $f(x) = nx - m \ln x \ (n>0)$ 有两个零点，则 $\frac mn$ 的取值范围是什么？ 
+\end{problemset}
+
+\chapter{数列极限}
+
+\begin{introduction}
+  \item 数列的定义
+  \item 描述性定义
+  \item 从“几何”上来理解
+  \item “$\varepsilon-N$ 语言”定义
+\end{introduction}
+\section{数列}
+一般的，与自然数一一对应的一系列实数就是\emph{数列}。记为 \emph{$\{a_n\}$}。在几何上，数列 $\{a_n\}$ 就是数轴上的一系列点。有时候也会把数列写成 $\{a_n\}_1^{+\infty}$。
+
+\chapter{习题解答}
+\section{预备知识相关习题解答}
+\subsection{第二章习题解答}
+\begin{enumerate}
+\item 显然不同，第二个函数的 $x$ 取不到负数，而第一个可以。
+\item 单调增加。 $f(x) = -1 + \frac1{1-x}$，设 $x_1 < x_2 < 1$，因为 $f(x_2) - f(x_1) = \frac{x_2-x_1}{(1-x_1)(1-x_2)} > 0$，所以 $f(x_2) > f(x_1)$，即 $f(x)$ 在 $(-\infty, 1)$ 内单调增加。
+\item 单调增加。设 $0 < x_1 < x_2$，因为 $f(x_2) < f(x_1) = x_2 + \ln x_2 - x_1 - \ln x_1 = x_2 - x_1 + \ln \frac{x_2}{x_1} > 0$，所以 $f(x_2) > f(x_1)$，即 $f(x)$ 在 $(0, +\infty)$ 内单调增加。
+\item 设 $-l < x_1 < x_2 < 0$，则 $0 < -x_2 < -x_1 < l$，由于 $f(x)$ 是奇函数，所以 $f(x_2) - f(x_1) = -f(-x_2) + f(-x_1)$。因为 $f(x)$ 在 $(0, l)$ 上单调增加，所以 $f(-x_1) - f(-x_2) > 0$，即 $f(x_2) > f(x_1)$，所以 $f(x)$ 在 $(-l, 0)$ 内也单调增加。
+\item 显然 $f_1(x)$ 是偶函数，$f_2(x)$ 既非奇函数也非偶函数、$f_3(x)$ 是奇函数、$f_4(x)$ 是偶函数、$f_5(x)$ 既非奇函数也非偶函数。
+\item 显然 $f_1(x)$ 不是周期函数，$f_2(x)$ 是周期函数、其最小正周期为 $\pi$，$f_3(x)$ 是周期函数、其最小正周期为 $2\pi$，$f_4(x)$ 是周期函数、其最小正周期为 $\frac{\pi}2$，$f_5(x)$ 是周期函数、其最小正周期为 $2$。
+\item $[-1, 1]$，$[2n \pi, (2n+1) \pi]\ (n \in \mathbb{Z})$，当 $0 < a \leq 0.5$ 时为 $[a, 1-a]$、当 $a > 0.5$ 时定义域为 $\varnothing$。
+\item $y = e^{x-1}-2$、$y=x^3-1$、$y=\frac{1-x}{1+x}$、$y = \log_2 \frac{x}{1-x}$。
+\item $(e, +\infty)$。令 $nx - m \ln x = 0$，解得 $\frac m n = \frac{\ln x}x$，易知 $g(x) = \frac{\ln x}{x}$ 在 $(0, e)$ 上单调递增，在 $(e, +\infty)$ 上单调递减。注意到 $g(0^+) = -\infty$，$f(+\infty) = 0$，$g(e) = \frac 1e$。要想其有两根，则 $0 < \frac m n < \frac 1e$，即 $\frac m n > e$，即 $(e, +\infty)$。
+\end{enumerate}
+
+\section{极限相关习题解答}
+\subsection{第三章习题解答}
+咕咕咕
+
+\chapter{版本更新历史}
+
+根据同学以及朋友的反馈，经过不断地修改。截止到本次更新，本书已有了将近 $100$ 次的更新、修改、Debug。十分感谢大家的资瓷！
+
+\datechange{2022/3/21}{版本 1.0 正式发布}
+\begin{change}
+  \item 初版发布
+\end{change}
+番外：这天是我\sout{可爱的}前桌的生日。结果我忘了给她准备生日礼物了。
+
+\datechange{2022/3/22}{版本 1.1 正式发布}
+\begin{change}
+  \item 更换封面、使用 Elegant 模板、使用 \LaTeX 重新排版。
+  \item 完善第二章函数相关内容（添加单调性、奇偶性）。
+\end{change}
+番外：这天是我班主任生日，结果我们班没一个同学知道。
+
+\datechange{2022/3/23}{版本 1.1.1a 发布}
+\begin{change}
+  \item 完善函数相关内容（添加有界性、周期性）。
+\end{change}
+番外：这天是同机房大佬仓鼠球的生日，让我们祝他生日快乐！
+
+\datechange{2022/3/25}{版本 1.1.1b 发布}
+\begin{change}
+  \item 添加第二章的习题。
+\end{change}
+
+\datechange{2022/3/26}{版本 1.1.2 发布}
+\begin{change}
+  \item 添加第二章习题第 9 题。
+  \item 添加 2.1：几何与逻辑符号。
+\end{change}
+
+\datechange{2022/3/28}{版本 1.1.3a 发布}
+\begin{change}
+  \item 添加第二章习题前 $5$ 题解答。
+\end{change}
+
+\datechange{2022/3/29}{版本 1.1.3b 发布}
+\begin{change}
+  \item 添加第二章后面全部习题的解答。
+  \item 完善格式。
+\end{change}
+
+\datechange{2022/3/31}{版本 1.2 发布}
+\begin{change}
+  \item 添加第一章。
+  \item 开始写第三章（数列极限）。
+\end{change}
+
+\datechange{2022/4/2}{版本 1.3.1 发布}
+\begin{change}
+  \item 添加版本历史更新。
+  \item 编写 3.1：数列。
+\end{change}
+
+\datechange{2022/4/3}{上传到 Github}
+\begin{change}
+  \item 完善第一章。
+  \item 上传到 Github。
+\end{change}
+\end{document}
